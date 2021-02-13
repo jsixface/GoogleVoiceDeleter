@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -14,27 +15,34 @@ public class VoiceDeleter {
 
     public VoiceDeleter() {
         ChromeOptions options = new ChromeOptions();
-        String home = System.getProperty("user.home");
-        options.addArguments("user-data-dir=" + home + "/temp/chromium-profile");
+        String profileDir = System.getProperty("user.home") + "/temp/chromium-profile";
+        File pDir = new File(profileDir);
+        if (!pDir.isDirectory()) pDir.mkdirs();
+        options.addArguments("user-data-dir=" + profileDir);
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS); // Increase this delay if you want to kill the program before it closes the browser.
+        // Increase this delay if you want to kill the program before it closes the browser.
         // useful to kill the program and login to google account. This removes logging in every time.
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
     }
 
     public void deleteMessage() throws InterruptedException {
         driver.get("https://voice.google.com/u/0/messages?");
         for (int i = 0; i < 50; i++) {
-            driver.findElement(By.xpath("//div[@id='messaging-view']/div/md-content/div/gv-conversation-list/md-virtual-repeat-container/div/div[2]/div/div/gv-text-thread-item/gv-thread-item/div/div[2]/ng-transclude/gv-thread-item-detail/gv-annotation")).click();
-            driver.findElement(By.cssSelector("button.md-icon-button.uM2Vn-pzCKEc.md-button > mat-icon.mat-icon.notranslate.mat-accent > svg")).click();
+            driver.findElement(By.xpath("//div[@id='messaging-view']/div/md-content/div/gv-conversation-list/" +
+                    "md-virtual-repeat-container/div/div[2]/div/div/gv-text-thread-item/gv-thread-item/div/" +
+                    "div[2]/ng-transclude/gv-thread-item-detail/gv-annotation")).click();
+
+            driver.findElement(By.cssSelector("button.md-icon-button.uM2Vn-pzCKEc.md-button > " +
+                    "mat-icon.mat-icon.notranslate.mat-accent > svg")).click();
+
             Thread.sleep(DELAY);
             driver.findElement(By.xpath("(//button[@type='button'])[9]")).click();
             Thread.sleep(DELAY);
+//            WebElement iUnderstand = driver.findElement(By.xpath("//md-checkbox/div[1]"));
+//            if (understand != null) iUnderstand.click();
+//            Thread.sleep(DELAY);
             driver.findElement(By.xpath("//gv-flat-button/span/button/span")).click();
             Thread.sleep(DELAY);
-//            WebElement understand = driver.findElement(By.xpath("//md-checkbox/div[1]"));
-//            if (understand != null) understand.click();
-//            driver.findElement(By.xpath("//gv-flat-button/span/button")).click();
-//            Thread.sleep(DELAY);
         }
     }
 
