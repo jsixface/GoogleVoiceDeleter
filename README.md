@@ -1,3 +1,5 @@
+## This is no longer needed. Google voice app has a multi delete function now.
+
 # Google Voice Deleter
 
 This project opens google voice in a Chromium browser and deletes messages one by one. You might want to *Archive* the messages you want to keep before running this. 
